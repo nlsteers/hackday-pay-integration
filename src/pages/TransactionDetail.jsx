@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { Pre, Tag, Intent, Spinner, SpinnerSize } from "@blueprintjs/core";
+import { Pre, Tag, Intent, Spinner, SpinnerSize, Callout } from "@blueprintjs/core";
 import useAxios from "../hooks/useAxios";
 
 const TransactionDetail = () => {
@@ -31,9 +31,9 @@ const TransactionDetail = () => {
       ) : (
         <div>
           {error && (
-            <div>
-              <p>{error.message}</p>
-            </div>
+            <Callout title="There was a problem" intent={Intent.DANGER}>
+              {error.message}
+            </Callout>
           )}
           {data && (
             <Pre style={{ whiteSpace: "pre-wrap" }}>

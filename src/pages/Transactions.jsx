@@ -9,6 +9,7 @@ import {
   HTMLTable,
   Spinner,
   SpinnerSize,
+  Callout
 } from "@blueprintjs/core";
 import useAxios from "../hooks/useAxios";
 
@@ -48,10 +49,13 @@ const Transactions = () => {
         ) : (
           <div>
             {error && (
-              <div><p>{error.message}</p>;
-              </div>
+              <Callout
+              title="There was a problem"
+              intent={Intent.DANGER}
+            >
+              {error.message}
+            </Callout>
             )}
-
             <HTMLTable bordered={true} striped={true} interactive={true}>
               <thead>
                 <tr>
