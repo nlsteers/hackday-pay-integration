@@ -1,9 +1,11 @@
 import { useParams } from "react-router-dom";
-import { useState } from "react";
-import { Button, Pre, Intent, ControlGroup, Tag } from "@blueprintjs/core";
+import { useState, useEffect } from "react";
+import { Button, Pre, Intent, ControlGroup, Tag, Spinner, SpinnerSize } from "@blueprintjs/core";
 import { useForm } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
 import axios from "axios";
+import useLocalStorage from "../hooks/useLocalStorage";
+import PaymentStatus from "../components/PaymentStatus.jsx";
 
 axios.defaults.headers.common["Authorization"] = `Bearer ${
 	import.meta.env.VITE_API_TOKEN
@@ -18,30 +20,44 @@ const Payment = () => {
 
 	const { status } = useParams();
 	const [result, setResult] = useState("");
-	// const [paymentOutcome, setPaymentOutcome] = useState("")
-	const [paymentInProgress, setPaymentInProgress] = useState(false);
+	const [loading, setLoading] = useState(false);
+	const [creatingPayment, setCreatingPayment] = useState(false);
+
+	const [paymentID, setPaymentID] = useLocalStorage("paymentID", "");
+	const [paymentState, setPaymentState] = useState(null);
 
 	const createPaymentandRedirect = () => {
-		setPaymentInProgress(!paymentInProgress);
+		setCreatingPayment(true);
 		axios
 			.post("/payments/", JSON.parse(result))
 			.then((response) => {
-				setPaymentInProgress(!paymentInProgress);
-				// put the payment id in storage for retrieval on return
+				setPaymentID(response.data.payment_id);
 				window.location.href = response.data._links.next_url.href;
 			})
 			.catch((err) => {
 				console.log(err);
+			})
+			.finally(() => {
+				setCreatingPayment(false);
 			});
 	};
 
-	// todo
-	// const getPaymentStatus = () => {
-	// 	if status === completed
-	// 	get payment status
-	// 	set payment outcome
-	// 	display in render
-	// }
+	const getPaymentStatus = () => {
+		if (status === "completed") {
+			setLoading(true);
+			axios
+				.get(`/payments/${paymentID}`)
+				.then((response) => {
+					setPaymentState(response.data);
+				})
+				.catch((err) => {
+					console.log(err);
+				})
+				.finally(() => {
+					setLoading(false);
+				});
+		}
+	};
 
 	const onSubmit = (data) => {
 		console.log(data);
@@ -62,12 +78,19 @@ const Payment = () => {
 		setResult(JSON.stringify(body, null, 2));
 	};
 
+	useEffect(() => {
+		if (status === "completed") {
+			getPaymentStatus();
+		}
+	}, [paymentID]);
+
 	return (
 		<div className="bp3-running-text bp3-text-large">
-
 			{status === "completed" ? (
-					<h2 className="bp3-heading">You made it!</h2>
-				) : (		
+				<div>
+					{loading ? <Spinner size={SpinnerSize.STANDARD} /> : <PaymentStatus paymentState={paymentState} />}
+				</div>
+			) : (
 				<div>
 					<h2 className="bp3-heading">Create a payment</h2>
 					<form onSubmit={handleSubmit(onSubmit)}>
@@ -113,8 +136,14 @@ const Payment = () => {
 						{result && (
 							<div>
 								<Pre style={{ whiteSpace: "pre-wrap" }}>{result}</Pre>
-								<Button large={true} icon="credit-card" intent={Intent.SUCCESS} onClick={() => createPaymentandRedirect()}>
-									Pay!
+								<Button
+									large={true}
+									icon="credit-card"
+									intent={Intent.SUCCESS}
+									onClick={() => createPaymentandRedirect()}
+									disabled={creatingPayment}
+								>
+									{creatingPayment ? <Spinner size={SpinnerSize.SMALL}/> : 'Pay!'} 
 								</Button>
 							</div>
 						)}
