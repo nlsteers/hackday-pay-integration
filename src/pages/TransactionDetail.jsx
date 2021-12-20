@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { Pre, Tag, Intent } from "@blueprintjs/core";
+import { Pre, Tag, Intent, Spinner,
+	SpinnerSize } from "@blueprintjs/core";
 import useAxios from "../hooks/useAxios";
 
 const TransactionDetail = () => {
@@ -22,7 +23,7 @@ const TransactionDetail = () => {
 		<div className="bp3-running-text bp3-text-large" style={{paddingTop:'10px'}}>
 			<Tag icon="exchange" large={true} intent={Intent.PRIMARY}>{id}</Tag>
 			{loading ? (
-				<p>loading...</p>
+				<Spinner size={SpinnerSize.STANDARD} />
 			) : (
 				<div>
 					{error && (
