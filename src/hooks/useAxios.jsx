@@ -9,9 +9,10 @@ const useAxios = ({ url, method, body = null }) => {
   console.log(url);
   const [response, setResponse] = useState(null);
   const [error, setError] = useState("");
-  const [loading, setloading] = useState(true);
+  const [loading, setLoading] = useState(true);
 
   const fetchData = () => {
+    setLoading(true)
     axios({ method: method, url: url, data: JSON.parse(body) })
       .then((res) => {
         setResponse(res.data);
@@ -20,7 +21,7 @@ const useAxios = ({ url, method, body = null }) => {
         setError(err);
       })
       .finally(() => {
-        setloading(false);
+        setLoading(false);
       });
   };
 
