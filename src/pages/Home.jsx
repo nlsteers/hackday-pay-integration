@@ -7,9 +7,9 @@ const Home = () => {
 			<p>
 				<Link to="/payment/create">Make a payment</Link>
 			</p>
-{/*			<p>
-				<Link to="/payment/meta">Make a payment with meta</Link>
-			</p>*/}
+			<p>
+				<Link to="/payment/completed">Last payment state</Link>
+			</p>
 		</div>
 	);
 };
