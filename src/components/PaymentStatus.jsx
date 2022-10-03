@@ -1,22 +1,32 @@
-import { Callout, Intent, Pre } from "@blueprintjs/core";
+import { Callout, Intent, Pre, Tag, AnchorButton } from "@blueprintjs/core";
 import { Link } from "react-router-dom";
 
 const PaymentStatus = ({ paymentState }) => {
   return (
     <div>
       {paymentState && (
+        <Callout icon="exchange" large={true} intent={Intent.PRIMARY}>
+          {paymentState.payment_id }
+        </Callout>
+      )}
+      {paymentState && (
         <div>
           {paymentState.state.status === "created" ||
             paymentState.state.status === "submitted" ||
             paymentState.state.status === "pending" ||
             (paymentState.state.status === "started" && (
-              <Callout title="Payment pending" intent={Intent.PRIMARY}>
+              <Callout>
                 <a
                   rel="noreferrer"
                   target="_blank"
                   href={paymentState._links.next_url.href}
                 >
-                  Complete your payment here
+                  <AnchorButton
+                    large={true}
+                    icon="credit-card"
+                  >
+                    Complete your payment here
+                  </AnchorButton>
                 </a>
               </Callout>
             ))}

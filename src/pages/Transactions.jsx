@@ -90,7 +90,7 @@ const Transactions = () => {
                               <div>
                                 <Tag
                                   large={true}
-                                  icon="updated"
+                                  icon="stopwatch"
                                   intent={Intent.PRIMARY}
                                 >
                                   Pending
@@ -112,8 +112,8 @@ const Transactions = () => {
                             <div>
                               <Tag
                                 large={true}
-                                icon="error"
-                                intent={Intent.DANGER}
+                                icon="warning-sign"
+                                intent={Intent.WARNING}
                               >
                                 {r.state.message}
                               </Tag>

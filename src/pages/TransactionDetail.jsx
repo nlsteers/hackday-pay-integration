@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { Pre, Tag, Intent, Spinner, SpinnerSize, Callout } from "@blueprintjs/core";
+import { Intent, Spinner, SpinnerSize, Callout } from "@blueprintjs/core";
+import PaymentStatus from "../components/PaymentStatus.jsx";
 import useAxios from "../hooks/useAxios";
 
 const TransactionDetail = () => {
@@ -23,9 +24,6 @@ const TransactionDetail = () => {
       className="bp3-running-text bp3-text-large"
       style={{ paddingTop: "10px" }}
     >
-      <Tag icon="exchange" large={true} intent={Intent.PRIMARY}>
-        {id}
-      </Tag>
       {loading ? (
         <Spinner size={SpinnerSize.STANDARD} />
       ) : (
@@ -36,9 +34,7 @@ const TransactionDetail = () => {
             </Callout>
           )}
           {data && (
-            <Pre style={{ whiteSpace: "pre-wrap" }}>
-              {JSON.stringify(data, null, 2)}
-            </Pre>
+            <PaymentStatus paymentState={data} />
           )}
         </div>
       )}
