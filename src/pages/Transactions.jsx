@@ -81,7 +81,7 @@ const Transactions = () => {
                         <td>{r.amount}</td>
                         <td>{r.description}</td>
                         <td>{r.reference}</td>
-                        <td>{r.card_details.cardholder_name}</td>
+                        <td>{r.card_details ? r.card_details.cardholder_name : 'Unavailable'}</td>
                         <td>
                           {r.state.status === "created" ||
                             r.state.status === "submitted" ||
