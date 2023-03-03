@@ -26,7 +26,7 @@ const Payment = () => {
   const [paymentID, setPaymentID] = useLocalStorage("paymentID", "");
   const [paymentState, setPaymentState] = useState(null);
 
-  const createPaymentandRedirect = () => {
+  const createPaymentAndRedirect = () => {
     setCreatingPayment(true);
     axios
       .post("/payments/", JSON.parse(result))
@@ -140,7 +140,7 @@ const Payment = () => {
                   large={true}
                   icon="credit-card"
                   intent={Intent.SUCCESS}
-                  onClick={() => createPaymentandRedirect()}
+                  onClick={() => createPaymentAndRedirect()}
                   disabled={creatingPayment}
                 >
                   {creatingPayment ? <Spinner size={SpinnerSize.SMALL}/> : 'Pay!'} 

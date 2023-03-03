@@ -14,21 +14,39 @@ import {
 import useAxios from "../hooks/useAxios";
 
 const Transactions = () => {
+  const itemsPerPage = 10;
+  const [totalItems, setTotalItems] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
+  const [startIndex, setStartIndex] = useState(0);
+  const [endIndex, setEndIndex] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+
   const { response, loading, error } = useAxios({
-    url: `/payments/?display_size=10&page=${currentPage}`,
+    url: `/payments/?display_size=${itemsPerPage}&page=${currentPage}`,
     method: "get",
   });
   const [data, setData] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [pages, setPages] = useState([1]);
 
+
   useEffect(() => {
     if (response !== null) {
       setData(response);
+      setTotalItems(response.total)
+
       setPages(
-        Array.from({ length: Math.ceil(response.total / 10) }, (_, i) => i + 1)
+        Array.from({ length: Math.ceil(totalItems / itemsPerPage) }, (_, i) => i + 1)
       );
+
+      const totalPages = Math.ceil(totalItems / itemsPerPage);
+      const startIndex = (currentPage - 1) * itemsPerPage + 1;
+      const endIndex = Math.min(startIndex + itemsPerPage - 1, totalItems);
+
+      setStartIndex(startIndex);
+      setEndIndex(endIndex);
+      setTotalPages(totalPages);
+
     }
   }, [response]);
 
@@ -113,7 +131,7 @@ const Transactions = () => {
                               <Tag
                                 large={true}
                                 icon="warning-sign"
-                                intent={Intent.WARNING}
+                                intent={Intent.DANGER}
                               >
                                 {r.state.message}
                               </Tag>
@@ -130,7 +148,7 @@ const Transactions = () => {
                   <tr>
                     <td colSpan={6}>Total</td>
                     <td>
-                      {data.count} of {data.total}
+                      {startIndex} to {endIndex} of {totalItems}<br/>
                     </td>
                   </tr>
                 )}
@@ -158,6 +176,7 @@ const Transactions = () => {
                       </select>
                       <span className="bp3-icon bp3-icon-double-caret-vertical"></span>
                     </div>
+                    &nbsp;of {totalPages}
                   </td>
                 </tr>
               </tfoot>
