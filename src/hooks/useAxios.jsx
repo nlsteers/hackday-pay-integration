@@ -6,7 +6,6 @@ axios.defaults.headers.common["Authorization"] = `Bearer ${
 }`;
 
 const useAxios = ({ url, method, body = null }) => {
-  console.log(url);
   const [response, setResponse] = useState(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
