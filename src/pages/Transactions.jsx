@@ -48,7 +48,7 @@ const Transactions = () => {
       setTotalPages(totalPages);
 
     }
-  }, [response]);
+  }, [response, loading]);
 
   const handleCollapse = () => {
     setIsOpen(!isOpen);
@@ -167,7 +167,6 @@ const Transactions = () => {
                             <option
                               key={p}
                               value={p}
-                              selected={p === currentPage}
                             >
                               page {p}
                             </option>

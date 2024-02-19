@@ -1,7 +1,7 @@
 {
-  "name": "hackday-pay-integrationn",
-  "license": "OGL-UK-3.0",
-  "version": "0.0.0",
+  "name": "hackday-pay-integration",
+  "license": "MIT",
+  "version": "1.0.0",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
